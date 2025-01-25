@@ -4,17 +4,61 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ed507bf7-072c-458d-9d60-78b9b6ae08cd" name="Changes" comment="" />
+    <list default="true" id="ed507bf7-072c-458d-9d60-78b9b6ae08cd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/innerTestData/test.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/innerTestData/test2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/innerTestData/test3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/newTest.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/newTest2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/newTest3.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Coordinator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/KeyValue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/Worker.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/constants/ConstantsClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Func.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="GradleModuleStateConfig" initialized="true" />
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="2s7UoRTbtCXaN94hAgPCEFEeDUB" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Maven.MapReduce [clean].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/vadim/IdeaProjects/MapReduce"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vadim\IdeaProjects\MapReduce" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\vadim\IdeaProjects\MapReduce\innerTestData" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -26,5 +70,30 @@
       <updated>1737533063592</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
+          <line>31</line>
+          <properties class="Worker" method="map">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="5" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Coordinator.java</url>
+          <line>28</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="futureMapFuncList.get(1)" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

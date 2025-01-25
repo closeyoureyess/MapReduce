@@ -13,20 +13,22 @@ import static constants.ConstantsClass.*;
 
 public class Worker {
 
-   /* private final List<KeyValue> synchronizedKeyValueList;*/
+    /* private final List<KeyValue> synchronizedKeyValueList;*/
     /*private final List<String> synchronizedStringList;*/
     /*private final Map<String, List<String>> synchronizedStringMap;*/
     private final ExecutorService executorService;
     private final ReentrantLock reentrantLock;
-    private AtomicInteger atomicInteger;
+    private AtomicInteger atomicCounter;
+    private final int numberOfTasks;
 
-    public Worker(ExecutorService executorService) {
+    public Worker(ExecutorService executorService, int numberOfTasks) {
         this.executorService = executorService;
         this.reentrantLock = new ReentrantLock();
         /*this.synchronizedKeyValueList = Collections.synchronizedList(new ArrayList<>());*/
         /*this.synchronizedStringList = Collections.synchronizedList(new ArrayList<>());*/
         /*this.synchronizedStringMap = Collections.synchronizedMap(new HashMap<>());*/
-        this.atomicInteger = new AtomicInteger(ZERO);
+        this.atomicCounter = new AtomicInteger(ZERO);
+        this.numberOfTasks = numberOfTasks;
     }
 
     public List<KeyValue> map(String fileName, String content) throws IOException {
@@ -88,15 +90,17 @@ public class Worker {
         String y;
         for (KeyValue keyValue : synchronizedKeyValueList) {
             String key = keyValue.getKey();
-            finalRowForWrite = key + SPACE + keyValue.getValue();
-            y = String.valueOf(Math.abs(key.hashCode())/* % atomicInteger.get()*/);
-            fileName = PREFIX_FILE_NAME + DASH + atomicInteger.get() + DASH + y;
-            Files.write(Path.of(fileName), finalRowForWrite.getBytes());
+            int hashCode = key.hashCode();
+            y = String.valueOf(hashCode % numberOfTasks);
+            finalRowForWrite = key + SPACE + keyValue.getValue() + System.lineSeparator();
+            fileName = PREFIX_FILE_NAME + DASH + atomicCounter.get() + DASH + y;
+
+            Files.write(Path.of(fileName), finalRowForWrite.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         }
     }
 
     private void fillSplitWordsToSynchronizedList(String content, List<KeyValue> synchronizedKeyValueList) {
-        atomicInteger.getAndIncrement();
+        atomicCounter.getAndIncrement();
         String[] words = content.split(SPACE);
         for (String word : words) {
             KeyValue keyValue = new KeyValue(word, ONE_NUMBER_STRING);

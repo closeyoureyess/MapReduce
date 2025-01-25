@@ -5,22 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed507bf7-072c-458d-9d60-78b9b6ae08cd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/innerTestData/test.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/innerTestData/test2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/innerTestData/test3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/newTest.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/newTest2.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/newTest3.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Coordinator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/KeyValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/Worker.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/constants/ConstantsClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Func.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Coordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Worker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +64,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
-          <line>31</line>
+          <line>33</line>
           <properties class="Worker" method="map">
             <option name="EMULATED" value="true" />
             <option name="WATCH_EXIT" value="false" />
@@ -87,6 +75,16 @@
           <url>file://$PROJECT_DIR$/src/main/java/Coordinator.java</url>
           <line>28</line>
           <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
+          <line>87</line>
+          <option name="timeStamp" value="8" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

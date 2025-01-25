@@ -11,7 +11,7 @@ public class Main {
             Coordinator coordinator = new Coordinator(executorService);
             coordinator.coordinatorFunction(List.of("newTest.txt", "newTest2.txt", "newTest3.txt"));
         } catch (InterruptedException | IOException | ExecutionException e ) {
-            System.out.println("Error");
+            System.out.println("Error" + e);
         }
     }
 }

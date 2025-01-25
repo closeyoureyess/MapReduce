@@ -25,7 +25,7 @@ public class Coordinator {
 
     public void coordinatorFunction(List<String> listWithFiles) throws IOException, InterruptedException, ExecutionException {
         List<Callable<List<KeyValue>>> listWithContent = new ArrayList<>();
-        Worker worker = new Worker(executorService);
+        Worker worker = new Worker(executorService, listWithFiles.size());
         pullTheTextFromFile(listWithFiles, listWithContent, worker); // Прочитать файлы, создать Callable с вызовом map для тредпула
 
         List<Future<List<KeyValue>>> futureMapFuncList = new ArrayList<>();

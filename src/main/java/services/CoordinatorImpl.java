@@ -1,3 +1,7 @@
+package services;
+
+import entity.KeyValue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,13 +22,13 @@ import static constants.ConstantsClass.FULL_PREFIX_FILE;
  * 1.Вызывается метод pullTheTextFromFile(), читающий файлы, создающий Callable с вызовом метода map
  * 2.Результат обрабатывается в handleMapFuncResult(), key-value из разных потоков собраны в 1 List
  * 3.Вызывается метод handleIntermediateFiles(), выгружающий в List пути ко всем промежуточным файлам
- * 4.Вызывается removeDuplicatesKeys, получающий из List<KeyValue> отсортированный список ключей
+ * 4.Вызывается removeDuplicatesKeys, получающий из List<entity.KeyValue> отсортированный список ключей
  * 5.Вызывается prepareCallableListForGatherValueFromFragmentedFiles, создающий Callable с вызовом метода
  * grabValuesForSameKeyFromFragmentedFiles
  * 6.Результат обрабатывается в handleGrabValuesFunc, Map заполняется ключами и списками значений этого ключа из разных потоков
  * 7.Запускается deleteIntermediateFiles, удаляющий промежуточные файлы
  * 8.Вызывается prepareCallableListForReduce, создающий Callable с вызовом метода collectFragmentedFiles
- * 9.Вызывается writeOverdoneElementsToFile, записывающий результат из синхронизированной коллекции в WorkerImpl в файл в однопоточном режиме
+ * 9.Вызывается writeOverdoneElementsToFile, записывающий результат из синхронизированной коллекции в services.WorkerImpl в файл в однопоточном режиме
  */
 public class CoordinatorImpl implements Coordinator {
 
@@ -51,7 +55,7 @@ public class CoordinatorImpl implements Coordinator {
         List<Path> listAllMatchingFiles = new ArrayList<>();
         handleIntermediateFiles(listAllMatchingFiles, listWithFiles.size()); // Получить раздробленные файлы из директории
 
-        List<String> listWithSortedKeys = removeDuplicatesKeys(keyValueList); // Получить отсортированный список ключей из List<KeyValue>
+        List<String> listWithSortedKeys = removeDuplicatesKeys(keyValueList); // Получить отсортированный список ключей из List<entity.KeyValue>
 
         List<Callable<Map<String, List<String>>>> listWithValuesFromFragmentedFiles = new ArrayList<>();
         prepareCallableListForGatherValueFromFragmentedFiles(listWithSortedKeys, listAllMatchingFiles, listWithValuesFromFragmentedFiles, worker);
@@ -152,7 +156,7 @@ public class CoordinatorImpl implements Coordinator {
      *
      * @param listWithFiles   List с наименованием файлов, которые переданы для обработки
      * @param listWithContent List с Callable c вызовом метода map внутри
-     * @param worker          Объект класса WorkerImpl, в котором нах-ся метод Map
+     * @param worker          Объект класса services.WorkerImpl, в котором нах-ся метод Map
      * @throws IOException
      */
     private void pullTheTextFromFile(List<String> listWithFiles, List<Callable<List<KeyValue>>> listWithContent, Worker worker) throws IOException {
@@ -208,7 +212,7 @@ public class CoordinatorImpl implements Coordinator {
     }
 
     /**
-     * Метод, получающий ключи из объектов KeyValue, сортирующий ключи в алфавитном порядке, возвращающий List только с этими ключами
+     * Метод, получающий ключи из объектов entity.KeyValue, сортирующий ключи в алфавитном порядке, возвращающий List только с этими ключами
      *
      * @param keyValueList List с парами key-value, которые ранее были получены в методе map
      * @return {@link List<String>} c ключами(в том виде, в котором их получили в map), отсортированными ы алфавитном порядке виде

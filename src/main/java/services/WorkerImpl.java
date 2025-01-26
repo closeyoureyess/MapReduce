@@ -1,3 +1,7 @@
+package services;
+
+import entity.KeyValue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -156,7 +160,7 @@ public class WorkerImpl implements Worker {
     }
 
     /**
-     * Метод, высчитывающий reduce-ключ по переданному хэшкоду String-ключа из List<KeyValue>
+     * Метод, высчитывающий reduce-ключ по переданному хэшкоду String-ключа из List<entity.KeyValue>
      *
      * @param hashCode хэшкод ключа
      * @return высчитанный после деления хэшкода по модулю reduce-ключ

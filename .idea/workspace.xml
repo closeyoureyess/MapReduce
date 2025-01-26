@@ -5,13 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed507bf7-072c-458d-9d60-78b9b6ae08cd" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/CoordinatorImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/WorkerImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/innerTestData/test.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/innerTestData/test2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/innerTestData/test3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Actions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Actions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Coordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/KeyValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/KeyValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Worker.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -23,6 +21,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -40,17 +39,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.Main.executor": "Run",
-    "Maven.MapReduce [clean].executor": "Run",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/vadim/IdeaProjects/MapReduce"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.MapReduce [clean].executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/vadim/IdeaProjects/MapReduce&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\vadim\IdeaProjects\MapReduce" />
@@ -88,14 +87,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
-          <line>59</line>
+          <url>file://$PROJECT_DIR$/src/main/java/WorkerImpl.java</url>
+          <line>61</line>
           <option name="timeStamp" value="18" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Coordinator.java</url>
-          <line>54</line>
-          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

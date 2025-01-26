@@ -8,7 +8,7 @@ public class Main {
 
     public static void main(String[] args) {
         try (ExecutorService executorService = Executors.newCachedThreadPool()) {
-            Coordinator coordinator = new Coordinator(executorService);
+            Coordinator coordinator = new CoordinatorImpl(executorService);
             coordinator.coordinatorFunction(List.of("newTest.txt", "newTest2.txt", "newTest3.txt"));
         } catch (InterruptedException | IOException | ExecutionException e ) {
             System.out.println("Error" + e);

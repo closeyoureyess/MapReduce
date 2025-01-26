@@ -90,7 +90,7 @@ public class WorkerImpl implements Worker {
         reentrantLock.lock();
         Map<String, List<String>> synchronizedStringMap = Collections.synchronizedMap(new TreeMap<>());
         List<String> synchronizedStringList = Collections.synchronizedList(new ArrayList<>());
-        Actions actions = new Actions();
+        Actions actions = new ActionsImpl();
         try {
             for (Path path : listAllMatchingFiles) { // Перебрать все Path, которые ведут к промежуточным файлам
                 String fileName = path.getFileName().toString(); // Получить имя файла

@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static constants.ConstantsClass.*;
@@ -49,11 +50,11 @@ public class Worker {
         return String.valueOf(values);
     }
 
-    public void collectFragmentedFiles(String key, List<String> values) throws IOException {
+    public Path collectFragmentedFiles(String key, List<String> values) throws IOException {
         reentrantLock.lock();
         try {
             String rowForWrite = key + SPACE + reduce(key, values);
-            Files.write(Path.of("resultFile.txt"), rowForWrite.getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+            return Files.write(Path.of("resultFile.txt"), rowForWrite.getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
         } finally {
             reentrantLock.unlock();
         }
@@ -63,14 +64,18 @@ public class Worker {
         reentrantLock.lock();
         Map<String, List<String>> synchronizedStringMap = Collections.synchronizedMap(new HashMap<>());
         List<String> synchronizedStringList = Collections.synchronizedList(new ArrayList<>());
+        Actions actions = new Actions();
         try {
             for (Path path : listAllMatchingFiles) { // Перебрать все Path, которые ведут к промежуточным файлам
                 String fileName = path.getFileName().toString(); // Получить имя файла
+                fileName = actions.trimFileNameAndGetReduceKey(fileName);
                 if (fileName.contains(key)) { // Если имя файла содержит ключ(номер reduce задачи, Y)
                     String line = Files.readString(path); // Вытащить ключ, значение из файла
-                    String[] words = line.split(SPACE);
+                    String[] words = line.split("\\s+");
                     for (String word : words) {
-                        boolean containsNumber = Pattern.matches(".*\\\\d+.*", word); // Проеврить, яв-тся ли полученный элемент цифрой(1)
+                        Pattern pattern = Pattern.compile(".*\\d+.*", Pattern.DOTALL);
+                        Matcher matcher = pattern.matcher(word);
+                        boolean containsNumber = matcher.matches(); // Проеврить, яв-тся ли полученный элемент цифрой(1)
                         if (containsNumber) {
                             synchronizedStringList.add(word); // Добавить в List
                         }

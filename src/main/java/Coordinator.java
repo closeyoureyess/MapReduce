@@ -52,8 +52,9 @@ public class Coordinator {
 
         Map<String, List<String>> keyAndListValue = new HashMap<>();
         handleGrabValuesFunc(keyAndListValue, futureGrabValuesFuncList);
+        deleteIntermediateFiles(listAllMatchingFiles);
 
-        List<Callable<Void>> listWithReduceFunc = new ArrayList<>();
+        List<Callable<Path>> listWithReduceFunc = new ArrayList<>();
         prepareCallableListForReduce(keyAndListValue, listWithReduceFunc, worker);
 
         if (!listWithReduceFunc.isEmpty()) {
@@ -61,15 +62,20 @@ public class Coordinator {
         }
     }
 
-    private void prepareCallableListForReduce(Map<String, List<String>> keyAndListValue, List<Callable<Void>> listWithReduceFunc,
+    private void deleteIntermediateFiles(List<Path> listAllMatchingFiles) throws IOException {
+        for (Path path : listAllMatchingFiles) {
+            Files.deleteIfExists(path);
+        }
+    }
+
+    private void prepareCallableListForReduce(Map<String, List<String>> keyAndListValue, List<Callable<Path>> listWithReduceFunc,
                                               Worker worker) {
         for (Map.Entry<String, List<String>> mapEnty : keyAndListValue.entrySet()) {
             String value = mapEnty.getKey();
             List<String> key = mapEnty.getValue();
-            listWithReduceFunc.add(() -> {
-                worker.collectFragmentedFiles(value, key);
-                return null;
-            });
+            listWithReduceFunc.add(() ->
+                    worker.collectFragmentedFiles(value, key)
+            );
         }
     }
 
@@ -80,9 +86,9 @@ public class Coordinator {
                 if (future.isDone()) {
                     Map<String, List<String>> result = future.get();
                     for (Map.Entry<String, List<String>> mapEnty : result.entrySet()) {
-                        String value = mapEnty.getKey();
-                        List<String> key = mapEnty.getValue();
-                        keyAndListValue.put(value, key);
+                        String key = mapEnty.getKey();
+                        List<String> value = mapEnty.getValue();
+                        keyAndListValue.put(key, value);
                     }
                     futureGrabValuesFuncList.remove(i); // Удаляем завершённое Future
                     i--; // Сдвигаем индекс, чтобы не пропустить следующий элемент
@@ -137,10 +143,12 @@ public class Coordinator {
 
     private List<String> getReduceKeyFromFileName(List<Path> listWithListAllMatchingFiles) throws IOException {
         List<Integer> listReduceKeyInteger = new ArrayList<>();
+        Actions actions = new Actions();
         String fileName;
         for (Path innerPath : listWithListAllMatchingFiles) {
             fileName = substringFileExtension(innerPath);
-            Integer reduceKey = Integer.getInteger(fileName.substring(fileName.lastIndexOf(DASH) + 1, fileName.length() - 1)); // Получить число Y из наименования файа
+            String stringReduceKey = actions.trimFileNameAndGetReduceKey(fileName);
+            Integer reduceKey = Integer.parseInt(stringReduceKey); // Получить число Y из наименования файа
             listReduceKeyInteger.add(reduceKey);
         }
         return listReduceKeyInteger.stream()

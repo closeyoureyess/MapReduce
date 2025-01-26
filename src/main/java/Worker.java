@@ -3,7 +3,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
@@ -14,20 +13,14 @@ import static constants.ConstantsClass.*;
 
 public class Worker {
 
-    /* private final List<KeyValue> synchronizedKeyValueList;*/
-    /*private final List<String> synchronizedStringList;*/
-    /*private final Map<String, List<String>> synchronizedStringMap;*/
-    private final ExecutorService executorService;
     private final ReentrantLock reentrantLock;
     private AtomicInteger atomicCounter;
     private final int numberOfTasks;
+    private final Set<String> synchronizedStringSet;
 
-    public Worker(ExecutorService executorService, int numberOfTasks) {
-        this.executorService = executorService;
+    public Worker(int numberOfTasks) {
         this.reentrantLock = new ReentrantLock();
-        /*this.synchronizedKeyValueList = Collections.synchronizedList(new ArrayList<>());*/
-        /*this.synchronizedStringList = Collections.synchronizedList(new ArrayList<>());*/
-        /*this.synchronizedStringMap = Collections.synchronizedMap(new HashMap<>());*/
+        this.synchronizedStringSet = Collections.synchronizedSortedSet(new TreeSet<>());
         this.atomicCounter = new AtomicInteger(ZERO);
         this.numberOfTasks = numberOfTasks;
     }
@@ -38,8 +31,8 @@ public class Worker {
         reentrantLock.lock();
         List<KeyValue> synchronizedKeyValueList = Collections.synchronizedList(new ArrayList<>());
         try {
-            fillSplitWordsToSynchronizedList(content, synchronizedKeyValueList);
-            writeWordsToFiles(synchronizedKeyValueList);
+            fillSplitWordsToSynchronizedList(content, synchronizedKeyValueList); // Метод, дробящий строку на ключи, записывающий в List ключ и единицу в виде значения
+            writeWordsToFiles(synchronizedKeyValueList); // Метод, записывающий информацию в промежуточные файлы
         } finally {
             reentrantLock.unlock();
         }
@@ -50,45 +43,84 @@ public class Worker {
         return String.valueOf(values);
     }
 
-    public Path collectFragmentedFiles(String key, List<String> values) throws IOException {
+    /**
+     * Метод, формирующий из переданного ключа(в виде, полученном в map) и List со списком эл-ов, т.е кол-ва встречаемости ключа в файлах,
+     * строку для записи в итоговый файл, помещающий эту строку в синхронизированную коллекцию. Вызывается также метод reduce, который превращает List с эл-ми
+     * встречаемости ключа в строку, которая потом будет записана в итоговый файл
+     *
+     *
+     * @param key ключ(в виде, полученном в map)
+     * @param values List со списком эл-ов, сколько раз этот ключ встречается в файлах
+     * @return true - эл-т успешно добавлен в синхронизрованную коллекцию, поредназначенную для агрегации результатов
+     * @throws IOException
+     */
+    public Boolean collectFragmentedFiles(String key, List<String> values) throws IOException {
         reentrantLock.lock();
         try {
-            String rowForWrite = key + SPACE + reduce(key, values);
-            return Files.write(Path.of("resultFile.txt"), rowForWrite.getBytes(), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+            String rowForWrite = key + SPACE + reduce(key, values)/* + System.lineSeparator()*/;
+            return synchronizedStringSet.add(rowForWrite);
         } finally {
             reentrantLock.unlock();
         }
     }
 
+    /**
+     * Метод, предназначенный для записи в однопоточном режиме агрегированных данных из синхронизированной коллеции Set<String> в итоговый файл
+     *
+     * @return Путь к файлу, куда записали информацию
+     * @throws IOException
+     */
+    public Path writeOverdoneElementsToFile() throws IOException {
+        return Files.write(Path.of("resultFile.txt"), synchronizedStringSet, StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+    }
+
+    /**
+     * Метод, проверяющий все файлы с тем же reduce-ключом на наличие такого же ключа, который передан в метод в виде String
+     *
+     * @param key Ключ в виде String(в том виде, в котором его в map взяли из файла)
+     * @param listAllMatchingFiles List с путями к промежуточным файлам
+     * @return {@link Map}  c ключом и кол-вом раз по единичке за каждый раз, когда это значение было найдено в файле
+     * @throws IOException
+     */
     public Map<String, List<String>> grabValuesForSameKeyFromFragmentedFiles(String key, List<Path> listAllMatchingFiles) throws IOException {
         reentrantLock.lock();
-        Map<String, List<String>> synchronizedStringMap = Collections.synchronizedMap(new HashMap<>());
+        Map<String, List<String>> synchronizedStringMap = Collections.synchronizedMap(new TreeMap<>());
         List<String> synchronizedStringList = Collections.synchronizedList(new ArrayList<>());
         Actions actions = new Actions();
         try {
             for (Path path : listAllMatchingFiles) { // Перебрать все Path, которые ведут к промежуточным файлам
                 String fileName = path.getFileName().toString(); // Получить имя файла
-                fileName = actions.trimFileNameAndGetReduceKey(fileName);
-                if (fileName.contains(key)) { // Если имя файла содержит ключ(номер reduce задачи, Y)
-                    String line = Files.readString(path); // Вытащить ключ, значение из файла
+                fileName = actions.trimFileNameAndGetReduceKey(fileName); // Обрезать имя файла, чтобы получить reduce-ключ из названия
+                String reduceKey = getBucket(key.hashCode()); // Получить reduce-ключ из переданного первоначального ключа, кот-ый нах-ся в виде String
+                if (fileName.contains(reduceKey)) { // Если имя файла содержит ключ(номер reduce задачи, Y)
+                    String line = Files.readString(path); // Вытащить ключи, значения из файла
                     String[] words = line.split("\\s+");
-                    for (String word : words) {
-                        Pattern pattern = Pattern.compile(".*\\d+.*", Pattern.DOTALL);
-                        Matcher matcher = pattern.matcher(word);
-                        boolean containsNumber = matcher.matches(); // Проеврить, яв-тся ли полученный элемент цифрой(1)
-                        if (containsNumber) {
-                            synchronizedStringList.add(word); // Добавить в List
+                    for (int i = 0; i < words.length; i++) {
+                        if (i % 2 >= 1 && // Индекс элемента нечетный
+                                (                      // ↓String является словом и этот String - переданый в метод grabValuesForSameKeyFromFragmentedFiles ключ↓
+                                        regexFunc("^[a-zA-Zа-яА-ЯёЁ]+$", words[i - 1]) && words[i - 1].equals(key)
+                                )
+                                &&
+                                regexFunc(".*\\d+.*", words[i])) { // Элемент явялется цифрой
+                            synchronizedStringList.add(words[i]);
                         }
                     }
                 }
             }
-            synchronizedStringMap.put(key, synchronizedStringList); // Добавить ключ, List со значениями в Map
-            return synchronizedStringMap;
+            synchronizedStringMap.put(key, synchronizedStringList);
+            return synchronizedStringMap; // Map с ключом и кол-вом раз по единичке за каждый раз, когда это значение было найдено в файле
         } finally {
             reentrantLock.unlock();
         }
     }
 
+    /**
+     * Метод, вычисляющий Y у ключа, X с помощью атомарного счетчика, записывающий ключ-значение в промежуточный файл с соответствующим названием, вида
+     * m-X-Y
+     *
+     * @param synchronizedKeyValueList синхронизированный List с парами key-value из переданного в координатор файла
+     * @throws IOException
+     */
     private void writeWordsToFiles(List<KeyValue> synchronizedKeyValueList) throws IOException {
         String finalRowForWrite;
         String fileName;
@@ -96,20 +128,49 @@ public class Worker {
         for (KeyValue keyValue : synchronizedKeyValueList) {
             String key = keyValue.getKey();
             int hashCode = key.hashCode();
-            y = String.valueOf(hashCode % numberOfTasks);
-            finalRowForWrite = key + SPACE + keyValue.getValue() + System.lineSeparator();
-            fileName = PREFIX_FILE_NAME + DASH + atomicCounter.get() + DASH + y;
+            y = getBucket(hashCode); // Узнать reduce-ключ
+            finalRowForWrite = key + SPACE + keyValue.getValue() + System.lineSeparator(); // Формирование строки key-value для записи в файл
+            fileName = PREFIX_FILE_NAME + DASH + atomicCounter.get() + DASH + y; // Формирование названия для файла
 
             Files.write(Path.of(fileName), finalRowForWrite.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         }
     }
 
+    /**
+     * Метод, дробящий строку на ключи, записывающий в List ключ и единицу в виде значения
+     *
+     * @param content Строка, содержащая в себе весь текст из передаваемого в координатор файла
+     * @param synchronizedKeyValueList синхронизированный List, куда будут записываться key-value
+     */
     private void fillSplitWordsToSynchronizedList(String content, List<KeyValue> synchronizedKeyValueList) {
         atomicCounter.getAndIncrement();
-        String[] words = content.split(SPACE);
+        String[] words = content.split(SPACE); // Раздробить строку по пробелу
         for (String word : words) {
-            KeyValue keyValue = new KeyValue(word, ONE_NUMBER_STRING);
-            synchronizedKeyValueList.add(keyValue);
+            KeyValue keyValue = new KeyValue(word, ONE_NUMBER_STRING); // Записать ключ и единицу в класс
+            synchronizedKeyValueList.add(keyValue); // Объект поместить в List
         }
+    }
+
+    /**
+     * Метод, высчитывающий reduce-ключ по переданному хэшкоду String-ключа из List<KeyValue>
+     *
+     * @param hashCode хэшкод ключа
+     * @return высчитанный после деления хэшкода по модулю reduce-ключ
+     */
+    private String getBucket(int hashCode) {
+        return String.valueOf(hashCode % numberOfTasks);
+    }
+
+    /**
+     * Метод, проверяющий String на соответсвие регулярному выражению
+     *
+     * @param regex регулярное выражение
+     * @param word слово
+     * @return true, если String соответствует регулярному выражению
+     */
+    private boolean regexFunc(String regex, String word) {
+        Pattern pattern = Pattern.compile(regex, Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(word);
+        return matcher.matches();
     }
 }

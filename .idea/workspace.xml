@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ed507bf7-072c-458d-9d60-78b9b6ae08cd" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/Actions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/innerTestData/test.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/innerTestData/test2.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/innerTestData/test3.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Actions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Actions.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Coordinator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Coordinator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/KeyValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/KeyValue.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Worker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Worker.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/constants/ConstantsClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/constants/ConstantsClass.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +42,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Application.Main.executor": "Debug",
+    "Application.Main.executor": "Run",
     "Maven.MapReduce [clean].executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -86,18 +89,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
-          <line>92</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/Worker.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="9" />
+          <line>59</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/Coordinator.java</url>
-          <line>53</line>
-          <option name="timeStamp" value="13" />
+          <line>54</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

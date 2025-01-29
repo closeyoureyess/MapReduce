@@ -23,7 +23,7 @@ public class WorkerImpl implements Worker {
     private final Set<String> synchronizedStringSet;
 
     public WorkerImpl(int numberOfTasks) {
-        this.reentrantLock = new ReentrantLock();
+        this.reentrantLock = new ReentrantLock(true);
         this.synchronizedStringSet = Collections.synchronizedSortedSet(new TreeSet<>());
         this.atomicCounter = new AtomicInteger(ZERO);
         this.numberOfTasks = numberOfTasks;
